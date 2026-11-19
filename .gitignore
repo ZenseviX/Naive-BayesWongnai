@@ -21,6 +21,5 @@ Thumbs.db
 *.joblib
 *.pkl
 
-# Downloaded datasets and generated reports
+# Downloaded datasets
 data/
-output/
