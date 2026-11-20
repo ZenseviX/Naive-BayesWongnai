@@ -15,10 +15,8 @@ try:
     from wordcloud import WordCloud
 except ImportError:
     WordCloud = None
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 
-FONT = '/Library/Fonts/Arial Unicode.ttf'
+FONT ='/Library/Fonts/Arial Unicode.ttf'
 if not os.path.exists(FONT):
     windows_font = r'C:\Windows\Fonts\tahoma.ttf'
     if os.path.exists(windows_font):
@@ -212,6 +210,9 @@ def generate_wordcloud_image(frequencies_dict):
             random.seed(42)
             for word, frequency in items:
                 size = 8 + 28 * (frequency - min_frequency) / spread
+                text_kwargs = {}
+                if os.path.exists(FONT):
+                    text_kwargs['fontproperties'] = font_manager.FontProperties(fname=FONT)
                 ax.text(
                     random.random(),
                     random.random(),
@@ -219,7 +220,7 @@ def generate_wordcloud_image(frequencies_dict):
                     fontsize=size,
                     ha='center',
                     va='center',
-                    fontproperties=font_manager.FontProperties(fname=FONT),
+                    **text_kwargs,
                 )
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
@@ -231,7 +232,7 @@ def generate_wordcloud_image(frequencies_dict):
         return image
 
     return WordCloud(
-        font_path=FONT, width=600, height=400,
+        font_path=FONT if os.path.exists(FONT) else None, width=600, height=400,
         background_color='white', max_words=50, random_state=42
     ).generate_from_frequencies(frequencies_dict)
 
